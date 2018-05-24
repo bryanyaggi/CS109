@@ -1,0 +1,329 @@
+%CS 109 Problem Set Template
+%B. E. Burr made original
+
+\documentclass{article} % basic article document class
+
+\usepackage{amsmath} % packages that allow mathematical formatting
+\usepackage{amssymb}
+\usepackage{graphicx} % package that allows you to include graphics
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\frenchspacing % one space after periods
+\usepackage{fancyhdr} % allows custom headers
+\usepackage{array}
+\usepackage{listings} % for displaying code
+\lstset{tabsize = 4}
+\usepackage{bbm}
+\usepackage{float}
+
+\pagestyle{fancy}
+\lhead{CS 109, Stanford University \\ Problem Set 4} 
+\rhead{Bryan Yaggi}
+\cfoot{\thepage}
+\renewcommand{\footrulewidth}{0.4pt} %footer
+
+\begin{document}
+\thispagestyle{fancy} %shows header/footer
+
+\begin{enumerate}
+	
+	\item \textit{On average, 7.5 users sign-up for an online social networking site each minute. What is the probability that:}
+	\begin{enumerate}
+		\item \textit{More than 10 users will sign-up for the social networking site in the next minute?}\\
+		\\
+		$X_1$ is the number of users that sign-up in a minute
+		\begin{align*}
+		&X_1 \sim Poi(\lambda_1) \text{ where } \lambda_1 = 7.5\\
+		&P(X_1 > 10) = 1 - \sum_{i=0}^{10} \frac{\lambda_1^i}{i!}e^{-\lambda_1} = .138
+		\end{align*}
+		
+		\item \textit{More than 15 users will sign-up for the social networking site in the next 2 minutes?}\\
+		\\
+		$X_2$ is the number of users that sign-up in 2 minutes
+		\begin{align*}
+		&X_2 \sim Poi(\lambda_2) \text{ where } \lambda_2 = 2 * 7.5 = 15\\
+		&P(X_2 > 15) = 1 - \sum_{i=0}^{10} \frac{\lambda_2^i}{i!}e^{-\lambda_2} = .432
+		\end{align*}
+		
+		\item \textit{More than 20 users will sign-up for the social networking site in the next 3 minutes?}\\
+		\\
+		$X_3$ is the number of users that sign-up in 3 minutes
+		\begin{align*}
+		&X_3 \sim Poi(\lambda_3) \text{ where } \lambda_3 = 3 * 7.5 = 22.5\\
+		&P(X_3 > 20) = 1 - \sum_{i=0}^{10} \frac{\lambda_3^i}{i!}e^{-\lambda_3} = .653
+		\end{align*}
+	
+	\end{enumerate}	
+	
+	\item \textit{Let $X$ be a continuous random variable with probability density function:}
+	\begin{align*}
+		f_X(x) &= 
+			\begin{cases}
+			c(2 - 2x^2) &-1 < x < 1\\
+			0 &\text{otherwise}
+			\end{cases}
+	\end{align*}
+		
+	\begin{enumerate}
+		\item \textit{What is the value of $c$ in order for $f_X(x)$ to be a valid probability density funtion?}
+		\begin{align*}
+		\int_{-1}^{1} c(2 - 2x^2) dx &= 1\\
+		c(2x - \frac{2}{3}x^3) \Big|_{-1}^{1} &= 1\\
+		c(\frac{4}{3} - \frac{-4}{3}) &= 1\\
+		c &= \frac{3}{8}
+		\end{align*}
+		
+		\item \textit{What is the cumulative distribution function (CDF) of X?}
+		\begin{align*}
+		F_X(a) = P(X \leq a) &= \int_{-\infty}^{a} f_X(x)dx = \int_{-1}^{a} c(2 - 2x^2) dx\\
+		&= c(2x - \frac{2}{3}x^3)\Big|_{-1}^{a} = c(-\frac{2}{3}a^3 + 2a + \frac{4}{3})\\
+		&= -\frac{a^3}{4} + \frac{a}{4} + \frac{1}{6}
+		\end{align*}
+		
+		\item \textit{What is E[X]?}
+		\begin{align*}
+		E[X] &= \int_{-\infty}^{\infty} xf_X(x)\,dx = \int_{-1}^{1} xc(2 - 2x^2)\,dx\\
+		&= c(x^2 - \frac{x^4}{4})\Big|_{-1}^{1} = 0
+		\end{align*}
+	
+	\end{enumerate}
+	
+	\item \textit{Say we have a cable of length $n$. We select a point (chosen uniformly randomly) along the cable, at which we cut the cable into two pieces. What is the probability that the shorter of the two pieces of the cable is less than $\frac{1}{3}$ the size of the longer of the two pieces?}\\
+	\\
+	$X$ is the length of the first piece of cable
+	\begin{align*}
+	&X \sim Uni(\alpha, \beta) \text{ where } \alpha = 0, \beta = n\\
+	&f(x) =
+		\begin{cases}
+		\frac{1}{\beta - \alpha} &\text{ when } \alpha \leq x \leq \beta\\
+		0 &\text{otherwise}
+		\end{cases}\\
+	&P(X < \frac{n}{3}) + P(X > \frac{2n}{3}) = 2\frac{\frac{n}{3}}{n} = \frac{2}{3}
+	\end{align*}
+	
+	\item \textit{Let $X$ be a normal (Gaussian) random variable with $\mu = 6$. If $P(X > 9) = 0.3$, what is the approximate value of $Var(X)$?}
+	\begin{align*}
+	P(X > 9) = 1 - P(X \leq 9) &= .3\\
+	1 - \Phi(\frac{x - \mu}{\sigma}) &= .3\\
+	\sigma &\approx 5.75\\
+	Var(X) = \sigma^2 &\approx 33.06
+	\end{align*}
+	
+	\item \textit{The median of a continuous random variable having cumulative distribution function $F$ is the value $m$ such that $F(m) = 0.5$. That is, a random variable is just as likely to be larger than the median as it is to be smaller. Find the median of $X$ in terms of the respective distribution parameters in each case.}
+	\begin{enumerate}
+		\item $X \sim Uni(a, b)$
+		\begin{align*}
+		P(X < m) = P(X > m) &= .5\\
+		\frac{m - \alpha}{\beta - \alpha} &= .5\\
+		m &= \frac{\alpha + \beta}{2}
+		\end{align*}
+		
+		\item $X \sim N(\mu, \sigma^2)$
+		\begin{align*}
+		P(X < m) = P(X > m) &= .5\\
+		m &= \mu
+		\end{align*}
+		
+		\item $X \sim Exp(\lambda)$
+		\begin{align*}
+		F(m) &= .5\\
+		1 - e^{-\lambda m} &= .5\\
+		m &= -\frac{ln(.5)}{\mu}
+		\end{align*}
+		
+	\end{enumerate}
+	
+	\item \textit{Let $X_i$ be the number of weekly visitors to a web site in week $i$, where $X_i \sim N(2200, 52900)$ for all $i$. Assume that all $X_i$ are independent of each other.}
+	\begin{enumerate}
+		\item \textit{What is the probability that the total number of visitors to the web site in the next two weeks exceeds 5000?}\\
+		\\
+		$Y$ is the number of visitors to the web site in a 2 week period\\
+		For $X_i$, $\sigma^2 = 52900 \Rightarrow \sigma = 230$ 
+		\begin{align*}
+		&Y = 2X_i \sim N(2\mu, 2^2\sigma^2)\\
+		&Y \sim N(4400, 211600)\\
+		&P(Y > 5000) = 1 - \Phi(\frac{x - \mu}{\sigma}) = 1 - \Phi(\frac{5000 - 4400}{460}) = 9.606 \times 10^{-2}
+		\end{align*}
+		
+		\item \textit{What is the probability that the total number of visitors exceeds 2000 in at least 2 of the next 3 weeks?}\\
+		\\
+		$Z_i$ is the event that the total number of visitors exceeds 2000 in i of 3 weeks
+		\begin{align*}
+		P(Z_2 \cup Z_3) &= P(Z_2) + P(Z_3)\\
+		P(Z_2) &= \binom{3}{2}P(X_i > 2000)^2P(X_i \leq 2000)\\
+		P(Z_3) &= P(X_i > 2000)^3\\
+		P(X_i > 2000) &= 1 - \Phi(\frac{x - \mu}{\sigma}) = .808\\
+		P(X_i \leq 2000) &= \Phi(\frac{x - \mu}{\sigma}) = .192\\
+		P(Z_2) &= .376\\
+		P(Z_3) &= .527\\
+		P(Z_2 \cup Z_3) &= .903
+		\end{align*}
+		
+	\end{enumerate}
+	
+	\item \textit{The joint probability density function of continuous random variables $X$ and $Y$ is given by:}
+	\begin{align*}
+		f_{X,Y}(x,y) &= 
+			\begin{cases}
+			c\frac{y}{x} &\text{where } 0 < y < x < 1\\
+			\end{cases}
+	\end{align*}
+	
+	\begin{enumerate}
+		\item \textit{What is the value of $c$ in order for $f_{X,Y}(x,y)$ to be a valid probability density?}
+		\begin{align*}
+		\int_{0}^{1} \int_{0}^{x} c\frac{y}{x}\,dy\,dx &= 1\\
+		\int_{0}^{1} \frac{c}{2}x \,dx &= 1\\
+		\frac{c}{4} &= 1 \Rightarrow c = 4
+		\end{align*}
+		
+		\item \textit{Are $X$ and $Y$ independent?}\\
+		\\
+		No, because the ranges of $X$ and $Y$ depend on each other.\\
+		
+		\item \textit{What is the marginal density function of $X$?}
+		\begin{align*}
+		f_X(a) &= \int_{0}^{a} \frac{c}{a}y\,dy\\
+		&= \frac{c}{2a}y^2 \Big|_{0}^{a}\\
+		&= \frac{c}{2}a = 2a
+		\end{align*}
+		
+		\item \textit{What is the marginal density function of $Y$?}
+		\begin{align*}
+		f_Y(b) &= \int_{b}^{1} cb\frac{1}{x}\,dx\\
+		&= cb\,ln|x| \Big|_{b}^{1}\\
+		&= -cb\,ln(b) = -4b\,ln(b)
+		\end{align*}
+		
+		\item \textit{What is $E[X]$?}
+		\begin{align*}
+		E[X] &= \int_{0}^{1} x\,f_X(x)\,dx\\
+		&= \int_{0}^{1} 2x^2\,dx\\
+		&= \frac{2}{3} x^3 \Big|_{0}^{1} = \frac{2}{3}
+		\end{align*}
+		
+		\item \textit{What is $E[Y]$?}
+		\begin{align*}
+		E[Y] &= \int_{0}^{1} y\,f_Y(y)\,dy\\
+		&= \int_{0}^{1} -4y^2\,ln(y)\,dy\\
+		&= -\frac{4}{3} y^3\,ln(y) - \int_{0}^{1} -\frac{4}{3}y^3\frac{1}{y}\,dy &\text{by integration by parts}\\
+		&= -\frac{4}{3} y^3\,ln(y) + \int_{0}^{1} \frac{4}{3}y^2\,dy\\
+		&= [-\frac{4}{3} y^3\,ln(y) + \frac{4}{9}y^3]\Big|_{0}^{1}\\
+		&= \frac{4}{9}
+		\end{align*}
+	
+	\end{enumerate}
+	
+	\item \textit{Let $X$, $Y$, and $Z$ be independent random variables, where $X \sim N(\mu_1, \sigma_1^2)$, $Y \sim N(\mu_2, \sigma_2^2)$, and $Z \sim N(\mu_3, \sigma_3^2)$.}
+	\begin{enumerate}
+		\item \textit{Let $A = X + Y$. What is the distribution (along with parameter values) for $A$?}
+		\begin{align*}
+		X + Y \sim N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)
+		\end{align*}
+		
+		\item \textit{Let $B = 4X + 3$. What is the distribution (along with parameter values) for $B$?}
+		\begin{align*}
+		B \sim N(4\mu_1 + 3, 16\sigma_1^2)
+		\end{align*}
+		
+		\item \textit{Let $C = aX - b^2Y + cZ$, where $a$, $b$, and $c$ are real-valued constants. What is the distribution (along with parameter values) for $C$?}
+		\begin{align*}
+		\sum_{i=1}^{N} X_i &\sim N(\sum_{i=1}^{N} \mu_i, \sum_{i=1}^{N} \sigma_{i}^{2})\\
+		C &\sim N(a\mu_1 - b^2\mu_2 + c\mu_3, a^2\sigma_1^2 + b^4\sigma_2^2 + c^2\sigma_3^2)
+		\end{align*}
+		
+	\end{enumerate}
+	
+	\item \textit{Say we have a coin with unknown probability $X$ of coming up heads when flipped. However, we believe (subjectively) that the prior probability (before seeing the results of any flips of the coin) of $X$ is a beta distribution, where $E[X] = 0.5$ and $Var[X] = \frac{1}{36} \approx 0.0278$}
+	\begin{enumerate}
+		\item \textit{What are the values of the parameters $a$ and $b$ (where $a,b > 1$) of the prior beta distribution for $X$?}
+		\begin{align*}
+		E[X] &= \frac{a}{a + b} = 0.5\\
+		Var[X] &= \frac{ab}{(a + b)^2(a + b + 1)} = \frac{1}{36}\\
+		a &= b = 4
+		\end{align*}
+		
+		\item \textit{Now say we flip the coin 12 times, obtaining 8 heads and 4 tails. What is the form (and parameters) of the posterior distribution ($X |$ 12 flips resulting in 8 heads and 4 tails)?}
+		\begin{align*}
+		a &= a_{prior} + \text{number of successes (heads)} = 4 + 8 = 12\\
+		b &= b_{prior} + \text{number of failures (tails)} = 4 + 5 = 9\\
+		X &\sim Beta(12, 9)
+		\end{align*}
+		
+		\item \textit{What is $E[X | \text{12 flips resulting in 8 heads and 4 tails}]$?}
+		\begin{align*}
+		E[X] &= \frac{a}{a + b} = \frac{12}{21} = \frac{4}{7} \approx .571
+		\end{align*}
+		
+		\item \textit{What is $E[X | \text{12 flips resulting in 8 heads and 4 tails}]$?}
+		\begin{align*}
+		Var[X] &= \frac{ab}{(a + b)^2(a + b + 1)} = \frac{6}{539} \approx .011
+		\end{align*}
+		
+	\end{enumerate}
+	
+	\item \textit{Say we have an array of $n$ doubles, "arr[n]" (indexed from 0 to $n - 1$), which contains independent and identically distributed non-negative real values (where each value in the array is unique). What is the expected number of times that "max update" (as noted by the comment in the code) is executed in the function (assuming the function is passed the array "arr" and its size is $n$)? Give an expression for the expectation.}
+	\begin{lstlisting}
+	double max(double arr[], int n)
+	{
+		double max = -1; // note: all elements in arr[] are > -1
+		for (int i = 0; i < n; i++)
+		{
+			if (arr[i] > max)
+			{
+				max = arr[i];
+			}
+		}
+		return max;
+	}
+	\end{lstlisting}
+	max is updated whenever the ith number is the maximum of the subarray from 0 to i\\
+	$X_i$ is the event that the ith number is the maximum of the subarray from 0 to i\\
+	$N_{updates}$ is the expected number of updates to the variable "max"
+	\begin{align*}
+	P(X_i) &= \frac{1}{i + 1}\\
+	N_{updates} &= \sum_{i = 0}^{n - 1} 1 * \frac{1}{i + 1} 
+	\end{align*}
+	
+	\item \textit{\textbf{[coding]} Below are two sequences of 300 "coin flips" (H for heads, T for tails). One of these is a true sequence of 300 independent flips of a fair coin. The other was generated by a person typing out Hs and Ts and trying to "seem" random. Which sequence is the true one? Make an argument that is justified with probabilities calculated on the sequences. We'll save you a bit of time telling you that both sequences have 148 heads, two less thatn the expected number for a 0.5 probability of heads. It won't be as simple as finding out which one is closer to half heads.}\\
+	\\
+	Sequence 1:\\
+	TTHHTHTTHTTTHTTTHTTTHTTHTHHTHHTHTHHTTTHHTHTHTTHTHH\\
+	TTHTHHTHTTTHHTTHHTTHHHTHHTHTTHTHTTHHTHHHTTHTHTTTHH\\
+	TTHTHTHTHTHTTHTHTHHHTTHTHTHHTHHHTHTHTTHTTHHTHTHTHT\\
+	THHTTHTHTTHHHTHTHTHTTHTTHHTTHTHHTHHHTTHHTHTTHTHTHT\\
+	HTHTHTHHHTHTHTHTHHTHHTHTHTTHTTTHHTHTTTHTHHTHHHHTTT\\
+	HHTHTHTHTHHHTTHHTHTTTHTHHTHTHTHHTHTTHTTHTHHTHTHTTT\\
+	\\
+	Sequence 2:\\
+	HTHHHTHTTHHTTTTTTTTHHHTTTHHTTTTHHTTHHHTTHTHTTTTTTH\\
+	THTTTTHHHHTHTHTTHTTTHTTHTTTTHTHHTHHHHTTTTTHHHHTHHH\\
+	TTTTHTHTTHHHHTHHHHHHHHTTHHTHHTHHHHHHHTTHTHTTTHHTTT\\
+	THTHHTTHTTHTHTHTTHHHHHTTHTTTHTHTHHTTTTHTTTTTHHTHTH\\
+	HHHTTTTHTHHHTHHTHTHTHTHHHTHTTHHHTHHHHHHTHHHTHTTTHH\\
+	HTTTHHTHTTHHTHHHTHTTHTTHTTTHHTHTHTTTTHTHTHTTHTHTHT\\
+	\\
+	A better way to gauge randomness is to analyze runs. The Wald-Wolfowitz test is a method for calculating the probability that a sequence has a given number of runs.\\
+	\\
+	$R$ is the number of runs in the sequence\\
+	$n_1$ is the number of occurences of the first value, $n_H$ number of heads in this case\\
+	$n_2$ is the number of occurences of the other value, $n_T$ number of tails in this case
+	\begin{align*}
+	P(R = r = 2k) &= \frac{2 \binom{n_1-1}{k-1} \binom{n_2-1}{k-1}}{\binom{n_1+n_2}{n_1}} &\text{when } r \text{ is even}\\
+	P(R = r = 2k + 1) &= \frac{2 \binom{n_1-1}{k} \binom{n_2-1}{k-1} + \binom{n_2-1}{k} \binom{n_1-1}{k-1}}{\binom{n_1+n_2}{n_1}} &\text{when } r \text{ is odd}\\
+	\text{For Sequence 1,}\\
+	&r = 216\\
+	&n_H = 148\\
+	&n_T = 257\\
+	&P(r = 216) = 5.248 \times 10^{-4}\\
+	\text{For Sequence 2,}\\
+	&r = 148\\
+	&n_H = 148\\
+	&n_T = 257\\
+	&P(r = 148) = 2.950 \times 10^{-3}
+	\end{align*}
+	
+	Sequence 2 is 5.62 times more likely to be random based on runs
+	
+\end{enumerate}
+
+\end{document}

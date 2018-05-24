@@ -1,0 +1,362 @@
+%CS 109 Problem Set Template
+%B. E. Burr made original
+
+\documentclass{article} % basic article document class
+
+\usepackage{amsmath} % packages that allow mathematical formatting
+\usepackage{amssymb}
+\usepackage{graphicx} % package that allows you to include graphics
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\frenchspacing % one space after periods
+\usepackage{fancyhdr} % allows custom headers
+\usepackage{array}
+\usepackage{listings} % for displaying code
+\lstset{tabsize = 4}
+
+\pagestyle{fancy}
+\lhead{CS 109, Stanford University \\ Problem Set 2} 
+\rhead{Bryan Yaggi}
+\cfoot{\thepage}
+\renewcommand{\footrulewidth}{0.4pt} %footer
+
+\begin{document}
+\thispagestyle{fancy} %shows header/footer
+
+\begin{enumerate}
+	
+	\item \textit{Let E and F be events defined on the same sample space S. Prove that:
+	$$P(EF) \geq P(E) + P(F) - 1$$
+	This fomula is known as Bonferroni's Inequality.}
+	\begin{align*}
+	P(E \cup F) &= P(E) + P(F) - P(EF)\\
+	P(EF) &= P(E) + P(F) - P(E \cup F)\\
+	P(E \cup F) &\leq 1\\
+	\therefore P(EF) &\geq P(E) + P(F) - 1
+	\end{align*}
+	
+	\item \textit{Say in Silicon Valley, 35\% of engineers program in Java and 28\% of the engineers who program in Java also program in C++. Furthermore, 40\% of engineers program in C++.}
+	\begin{enumerate}
+		\item \textit{What is the probability that a randomly selected engineer programs in Java and C++?)}\\
+		\\
+		$S =$ \{engineers in Silicon Valley\}\\
+		$J =$ \{engineers who program in Java\}\\
+		$C =$ \{engineers who program in C++\}
+		
+		$$P(J \cap C) = P(J) P(C | J) = .35 * .28 = .098$$
+		
+		\item \textit{What is the conditional probability that a randomly selected engineer programs in Java given that he/she programs in C++?}
+		
+		$$P(J | C) = \frac{P(J \cap C)}{P(J)} = \frac{.098}{.35} = .28 = P(C | J)$$
+	
+	\end{enumerate}
+	
+	\item \textit{A games website has determined that they have a problem with players cheating using automated playing tools (robots). They decide to deploy random "bonus games" that are hard for robots which function as CAPTCHA-like tests of whether players are actually robots.\\
+	\\
+	Each player is given three bonus games. If the player fails in one of the games, they are flagged as a possible robot. The probability that a human succeeds at a single bonus game is 0.95 while a robot only succeeds with a probability of 0.3}
+	\begin{enumerate}
+		\item \textit{If a player is actually a robot, what is the probability they get flagged (the probability they fail at least one game)? If a player is a human, what is the probability they get flagged? Assume players (both humnas and robots) succeed or fail in each of the three games independently.}\\
+		\\
+		$F =$ player is flagged during the bonus games\\
+		$P_x =$ player passes bonus game x
+		\begin{align*}
+		P(F_r) &= 1 - P(P_{1,r}P_{2,r}P_{3,r}) = 1 - (.3)^3 = .973\\
+		P(F_h) &= 1 - P(P_{1,h}P_{2,h}P_{3,h}) = 1 - (.95)^3 = .143
+		\end{align*}
+		
+		\item \textit{The fraction of players on the site that are cheating with robots is 1/10. Suppose a player gets flagged. Using your answers from part (a). What is the probability that player is a robot?}\\
+		\\
+		Using Bayes' Theorem,
+		\begin{align*}
+		P(R | F) &= \frac{P(F | R)P(R)}{P(F)}\\
+		P(F) &= p(F | R)P(R) + P(F | R^C)P(R^C) = P(F_r) * \frac{1}{10} + P(F_h) * \frac{9}{10} = .226\\
+		P(R | F) &= \frac{P(F_r) * \frac{1}{10}}{P(F)} = .431
+		\end{align*}
+				
+	\end{enumerate}
+	
+	\item \textit{Two emails are received at a mail server. Suppose that each email is spam with probability 0.8 and that whether each email message is spam is an independent event from the other.}
+	\begin{enumerate}
+		\item \textit{Suppose that you are told that at least one of the two emails is spam. Compute the conditional probability that both emails are spam.}\\
+		\\
+		$E =$ email is spam
+		
+		$$P(E_1 | E_2) = \frac{P(E_1E_2)}{P(E_2)} = E_1 = .8$$
+		
+		\item \textit{Suppose now that one of the emails is randomly (accidentally) forwarded from the server to your account, and you see that this email is spam. What is the probability that both emails originally received by the server are spam in this case?}\\
+		\\
+		This should not have any affect on the probability that the original emails are spam. This is not the Monty Hall problem because there is no option to switch emails after new knowledge is gleaned.
+	
+	\end{enumerate}
+	
+	\item \textit{Consider a hash table with 5 buckets, where the probability of a string getting hashed to bucket i is given by $p_i$, where $\sum_{i = 1}^{5} p_i = 1$. Now, 6 strings are hashed into the hash table.}
+	\begin{enumerate}
+		\item \textit{Determine the probability that each of the first 4 buckets has at least 1 string hashed to each of them. Explicitly expand your answer in terms of $p_i$s, so that it does not include any summations.}\\
+		\\
+		$E =$ event as described\\
+		$F_i =$ event such that at least one string is hashed to bucket i
+		\begin{align*}
+		P(E) &= P(F_1F_2F_3F_4) = 1 - P([F_1F_2F_3F_4]^C)\\
+		&= 1 - P(F_1^C \cup F_2^C \cup F_3^C \cup F_4^C) &\text{by De Morgan's Laws}\\
+		&= 1 - \sum_{r = 1}^{k} (-1)^{r + 1} \sum_{i_1 < ... < i_r} \bigcap_{j = 1}^{r} E_{i_j} &\text{by General Inclusion/Exclusion}\\
+		&= 1 - ((P(F_1^C) + P(F_2^C) + P(F_3^C) + P(F_4^C))\\
+		&- (P(F_1^CF_2^C) + P(F_1^CF_3^C) + P(F_1^CF_4^C) + P(F_2^CF_3^C)\\
+		&+ P(F_2^CF_4^C) + P(F_3^CF_4^C)) + (P(F_1^CF_2^CF_3^C) + P(F_1^CF_2^CF_4^C)\\
+		&+ P(F_1^CF_3^CF_4^C) + P(F_2^CF_3^CF_4^C)) - P(F_1^CF_2^CF_3^CF_4^C))
+		\end{align*}
+		
+		\item \textit{Assuming $p_1 = 0.1$, $p_2 = 0.25$, $p_3 = 0.3$, $p_4 = 0.25$, and $p_5 = 0.1$, explicitly compute your answer to part (a) as a numeric value.}\\
+		\\
+		$m =$ number of strings to hash
+		\begin{align*}
+		P(F_1^C) &= (1 - p_1)^m = (1 - .1)^6 = .531\\
+		P(F_2^C) &= (1 - p_2)^m = (1 - .25)^6 = .178\\
+		P(F_3^C) &= (1 - p_3)^m = (1 - .3)^6 = .118\\
+		P(F_4^C) &= (1 - p_4)^m = (1 - .25)^6 = .178\\
+		P(F_1^CF_2^C) &= (1 - p_1 - p_2)^m = (1 - .1 - .25)^6 = .075\\
+		P(F_1^CF_3^C) &= (1 - p_1 - p_3)^m = (1 - .1 - .3)^6 = .047\\
+		P(F_1^CF_4^C) &= (1 - p_1 - p_4)^m = (1 - .1 - .25)^6 = .075\\
+		P(F_2^CF_3^C) &= (1 - p_2 - p_3)^m = (1 - .25 - .3)^6 = .008\\
+		P(F_2^CF_4^C) &= (1 - p_2 - p_4)^m = (1 - .25 - .25)^6 = .016\\
+		P(F_3^CF_4^C) &= (1 - p_3 - p_4)^m = (1 - .3 - .25)^6 = .008\\
+		P(F_1^CF_2^CF_3^C) &= (1 - p_1 - p_2 - p_3)^m = (1 - .1 - .25 - .3)^6 = .002\\
+		P(F_1^CF_2^CF_4^C) &= (1 - p_1 - p_2 - p_3)^m = (1 - .1 - .25 - .25)^6 = .004\\
+		P(F_1^CF_3^CF_4^C) &= (1 - p_1 - p_2 - p_3)^m = (1 - .1 - .3 - .25)^6 = .002\\
+		P(F_2^CF_3^CF_4^C) &= (1 - p_1 - p_2 - p_3)^m = (1 - .25 - .3 - .25)^6 = .000\\
+		P(F_1^CF_2^CF_3^CF_4^C) &= (1 - p_1 - p_2 - p_3 - p_4)^m = (1 - .1 - .25 - .3 - .25)^6 = .000\\
+		\therefore P(E) &= .217
+		\end{align*}
+	
+	\end{enumerate}
+	
+	\item \textit{Two cards are randomly chosen without replacement from an ordinary deck of 52 cards. Let E be the event that both cards are aces. Let F be the event that the ace of spades is one of the chosen cards, and let G be the event that at least one ace is chosen. Compute:}
+	\begin{enumerate}
+		\item $P(E | F)$
+		\begin{align*}
+		P(E) &= \frac{4}{52} * \frac{3}{51} = .0045\\\\
+		P(F) &= 1 - \frac{51}{52} * \frac{50}{51} = .0385\\\\
+		P(G) &= 1 - \frac{48}{52} * \frac{47}{51} = .1493\\\\
+		P(E | F) &= \frac{3}{51} = .0588
+		\end{align*}
+		
+		\item $P(E | G)$
+		
+		$$P(E | G) = \frac{3}{51} = .0588$$
+	
+	\end{enumerate}
+	
+	\item \textit{Five servers are located in a computer cluster. After one year, each server independently is still working with probability p, and otherwise fails (with probability $1 - p$).}
+	\begin{enumerate}
+		\item \textit{What is the probability that at least 1 server is still working after one year?}\\
+		\\
+		$W_i =$ server i is still working after one year
+		\begin{align*}
+		P(W_1 \cup W_2 \cup W_3 \cup W_4 \cup W_5) &= 1 - P(W_1^CW_2^CW_3^CW_4^CW_5^C) = 1 - (1 - p)^5
+		\end{align*}
+		
+		\item \textit{What is the probability that exactly 2 servers are still working after one year?}\\
+		\\
+		$W_A =$ arbitrary server A is still working\\
+		$W_B =$ arbitrary server B, which is different from server A, is still working\\
+		$W_i =$ server i other than servers A and B is still working
+		\begin{align*}
+		P(W_AW_BW_C^CW_D^CW_E^C) = p^2(1 - p)^3 * \binom{5}{2}
+		\end{align*}
+		
+		\item \textit{What is the probability that at least 2 servers are still working after one year?}
+		\begin{align*}
+		&P(W_AW_BW_C^CW_D^CW_E^C \cup W_AW_BW_CW_D^CW_E^C \cup W_AW_BW_CW_DW_E^C \cup W_AW_BW_CW_DW_E)\\
+		&= p^2(1 - p)^3 * \binom{5}{2} + p^3(1 - p)^2 * \binom{5}{3} + p^4(1 - p) * \binom{5}{4} + p^5 * \binom{5}{5}
+		\end{align*}
+	
+	\end{enumerate}
+	
+	\item \textit{A bit string of length n is generated randomly such that each bit is generated independently with probability p that the bit is a 1 (and 0 otherwise). How large does n need to be (in terms of p) so that the probability that there is at least one 1 in the string is at least 0.6?}\\
+	\\
+	$E =$ there is at least one 1 in the string\\
+	$T_i =$ bit i is a 1
+	\begin{align*}
+	P(E) &\geq .6\\
+	1 - P(\bigcap_{i = 1}^{n} T_i^C) &\geq .6\\
+	1 - (1 - p)^n &\geq .6\\
+	(1 - p)^n &\geq .4\\
+	n &\geq \frac{ln(.4)}{ln(1 - p)}
+	\end{align*}
+	
+	\item \textit{Consider a hash table with 15 buckets, of which 9 are empty (have no strings hashed to them) and the other 6 buckets are non-empty (have at least one string hashed to each of them). Now, 2 new strings are independently hashed into the table, where each string is equally likely to be hashed into any bucket. Later, another 2 strings are hashed into the table (again, independently and equally likely to get hashed to any bucket). What is the probability that both of the final 2 strings are each hashed to empty buckets in the table?}\\
+	\\
+	$E_1 =$ first chosen bucket is empty\\
+	$E_2 =$ second chosen bucket is empty\\
+	\\
+	After first 2 strings are hashed,
+	\begin{align*}
+	P(\text{9 buckets empty, 6 occupied}) &= P(E_1^CE_2^C) = \frac{6}{15} * \frac{6}{15} = .16\\
+	P(\text{8 buckets empty, 7 occupied}) &= P(E_1E_2^C \cup E_1^CE_2) = \frac{9}{15} * \frac{7}{15} + \frac{6}{15} * \frac{9}{15} = .52\\
+	P(\text{7 buckets empty, 8 occupied}) &= P(E_1E_2) = \frac{9}{15} * \frac{8}{15} = .32
+	\end{align*}
+	$E_3 =$ third chosen bucket is empty\\
+	$E_4 =$ fourth chosen bucket is empty\\
+	\\
+	After second 2 strings are hashed,
+	\begin{align*}
+	P(E_3E_4) &= P(E_3E_4 | P(E_1^CE_2^C)) + P(E_3E_4 | P(E_1E_2^C \cup E_1^CE_2)) + P(E_3E_4 | P(E_1E_2))\\
+	&= \frac{9}{15} * \frac{8}{15} * .16 + \frac{8}{15} * \frac{7}{15} * .52 + \frac{7}{15} * \frac{6}{15} * .32 = .240
+	\end{align*}
+	
+	\item \textit{Suppose we want to write an algorithm \textbf{fairRandom} for randomly generating a 0 or 1 with equal probability. Unfortunately, all we have available to us is a function: \textbf{int unknownRandom();} that randomly generates bits, where on each call a 1 is returned with some known probability p that need not be equal to 0.5 (and 0 is returned with probability 1 - p).\\
+	\\
+	Consider the following algorithm for \textbf{fairRandom} and the function \textbf{simpleRandom}.}
+	\begin{lstlisting}
+	int fairRandom()
+	{
+		int r1, r2;
+		while (true)
+		{
+			r1 = unknownRandom();
+			r2 = unknownRandom();
+			if (r1 != r2)
+			{
+				break;
+			}
+		}
+		return r2;
+	}
+	
+	int simpleRandom()
+	{
+		int r1, r2;
+		r1 = unknownRandom();
+		while (true)
+		{
+			r2 = unknownRandom();
+			if (r1 != r2)
+			{
+				break;
+			}
+		}
+		return r2;
+	}
+	\end{lstlisting}
+	\begin{enumerate}
+	\item \textit{Show mathmatically that \textbf{fairRandom} does indeed return a 0 or a 1 with equal probability.}\\
+	\\
+	$T_{r1} =$ r1 has a value of 1\\
+	$T_{r2} =$ r2 has a value of 1\\
+	$T_{result} =$ fairRandom returns 1\\
+	\\
+	For the function to return, r1 and r2 must be different.
+	\begin{align*}
+	P(T_{r1}) &= p\\
+	P(T_{r2}) &= p\\
+	T_{result} &= T_{r2}T_{r1}^C\\
+	P(T_{result}) &= \frac{P(T_{r2}T_{r1}^C)}{P(T_{r2}T_{r1}^C) + P(T_{r2}^CT_{r1})} = \frac{p * (1 - p)}{p * (1 - p) + (1 - p) * p} = .5
+	\end{align*}
+	
+	\item \textit{Say we want to simplify the function, so we write the \textbf{simpleRandom} function. Would the \textbf{simpleRandom} function also generate 0s and 1s with equal probability? Explain why or why not. Determine P(simpleRandom returns 1) in terms of p.}\\
+	\\
+	Now, $T_{result} =$ simpleRandom returns 1
+	\begin{align*}
+	T_{result} &= T_{r1}^C\\
+	P(T_{result}) &= P(T_{r1}^C) = (1 - p) &\text{only depends on the value of r1}
+	\end{align*}	
+	
+	\end{enumerate}
+	
+	\item \textit{The color of a person's eyes is determined by a pair of eye-color genes, as follows:}
+	\begin{itemize}
+	\item \textit{if both of the eye-color genes are blue-eyed genes, then the person will have blue eyes}	
+	\item \textit{if one or more of the genes is a brown-eyed gene, then the person will have brown eyes}			
+	\end{itemize}
+	
+	\textit{A newborn child independently receives one eye-color gene from each of his parents, and the gene it receives from a parent is equally likely to be either of the two eye-color genes of that parent. Suppose William and both of his parents have brown eyes, but William's sister (Claire) has blue eyes. (We assume that blue and brown are the only eye-color genes.)}
+	\begin{enumerate}
+	\item \textit{What is the probability that William possesses a blue-eyed gene?}\\
+	\\
+	William's parents each have a blue-eyed gene and a brown-eyed gene.\\
+	\\
+	$B_1 =$ William gets a blue-eyed gene from parent 1\\
+	$B_2 =$ William gets a blue-eyed gene from parent 2
+	\begin{align*}
+	P(B_1 \cup B_2) &= 1 - P(B_1^CB_2^C)\\
+	&= 1 - (.5 * .5) = .75
+	\end{align*}
+	
+	\item \textit{Suppose that William's wife has blue eyes, What is the probability that their first child will have blue eyes?}\\
+	\\
+	William's wife has 2 blue-eyed genes. William could have any combination of genes, but his parents' genes are known.\\
+	\\
+	$B_{Will} =$ child gets a blue-eyed gene from William\\
+	$B_{wife} =$ child gets a blue-eyed gene from William's wife\\
+	\begin{align*}
+	B_{Will}B_{wife} &= (B_{Will}B_{wife} | \text{\{Will has 2 blue genes\}}) \cup (B_{Will}B_{wife} | \text{\{Will has 1 blue gene\}})\\
+	P(B_{Will}B_{wife}) &= P(B_{Will}B_{wife} | \text{\{Will has 2 blue genes\}}) + P(B_{Will}B_{wife} | \text{\{Will has 1 blue gene\}})\\
+	&= 1 * 1 * .25 + .5 * 1 * .75 = .625
+	\end{align*}
+	
+	\item \textit{Still assuming that William's wife has blue eyes, if their first child had brown eyes, what is the probability that their next child will also have brown eyes?}\\
+	\\
+	The probability that the second child has brown eyes is not dependent on the color of the first child's eyes.
+	\begin{align*}
+	P(B_{Will}^C \cup B_{wife}^C) = P(B_{Will}^C) = 1 - P(B_{Will}B_{wife}) = .375
+	\end{align*}
+	
+	\end{enumerate}	
+	
+	\item \textit{A robot, which only has a camera as a sensor, can either be in one of two locations: $L_1$ or $L_2$. The robot doesn't know exactly where it is and it represents this uncertainty by keeping track of two possibilities: $P(L_1)$ and $P(L_2)$. Based on all past observations, the robot thinks that there is a 0.7 probability it is in $L_1$ and a 0.3 probability that it is in $L_2$.\\
+	The robot then observes a window through its camera, and although there is only a window in $L_2$, it can't conclude with certainty that is in fact $L_2$, since its image recognition algorithm is not perfect. The probability of observing a window given there is no window at its location is 0.2, and the probability of observing a window given there is a window is 0.9. After incorporating the observation of a window, what are the robot's new values for $P(L_1)$ and $P(L_2)$?}\\
+	\\
+	$W =$ window observed
+	\begin{align*}
+	P(L_{2,new}) &= P(L_2 | W) = \frac{P(W | L_2)P(L_{2,old})}{P(W | L_2)P(L_{2,old}) + P(W | L_1)P(L_{1,old})}\\
+	&= \frac{.9 * .3}{.9 * .3 + .2 * .7} = .659\\
+	P(L_{1,new}) &= 1 - P(L_{2,new}) = .341
+	\end{align*}
+	
+	\item \textit{\textbf{[coding]} Your cell phone is constantly trying to keep track of where you are. At any given point in time, for all nearby location, your phone stores a probability that you are in that location. Right now your phone believes that you are in one of 16 different locations arranged on a grid with the following probabilities:}
+	\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+	\multicolumn{4}{c}{P(location)}\\
+	\hline
+	0.05 & 0.10 & 0.05 & 0.05\\
+	\hline
+	0.05 & 0.10 & 0.05 & 0.05\\
+	\hline
+	0.05 & 0.10 & 0.05 & 0.05\\
+	\hline
+	0.05 & 0.10 & 0.05 & 0.05\\
+	\hline
+	\end{tabular}
+	\begin{tabular}{|c|c|c|c|}
+	\multicolumn{4}{c}{P(observe signal $|$ location)}\\
+	\hline
+	0.75 & 0.95 & 0.75 & 0.05\\
+	\hline
+	0.05 & 0.75 & 0.95 & 0.75\\
+	\hline
+	0.01 & 0.05 & 0.75 & 0.95\\
+	\hline
+	0.01 & 0.01 & 0.05 & 0.75\\
+	\hline
+	\end{tabular}
+	\end{center}
+	
+	\textit{Your phone connects to a known cell tower and records two bars of signal. For each grid location $L_i$, you can calculate the probability of observing two bars from this particular tower, assuming that the cell phone is in location $L_i$. That calculation is based on knowledge of the dynamics of this particular cell tower and stochasticity of signal strength.\\
+	As an example: the value of 0.05 in the left figure means that there was a 0.05 probability that the user was in the bottom right grid cell prior to observing the cell tower signal. The value of 0.75 on the right figure means that you think the probability of observing two signal bars, given the user was in the bottom right grid cell, is 0.75.\\
+	Write a program to calculate, for each of the 16 locations, the new probability that the user is in each location given the cell tower observation. Report the probabilities of all 16 cells and provide the code for your program.}
+	\begin{center}	
+	\begin{tabular}{|c|c|c|c|}
+	\multicolumn{4}{c}{P(location $|$ observe signal)}\\
+	\hline
+	0.0375 & 0.0950 & 0.0375 & 0.0025\\
+	\hline
+	0.0025 & 0.0750 & 0.0475 & 0.0375\\
+	\hline
+	0.0005 & 0.0025 & 0.0750 & 0.0475\\
+	\hline
+	0.0005 & 0.0005 & 0.0050 & 0.0375\\
+	\hline
+	\end{tabular}
+	\end{center}	
+	
+\end{enumerate}
+
+\end{document}

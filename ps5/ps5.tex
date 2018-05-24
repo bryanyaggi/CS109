@@ -1,0 +1,267 @@
+%CS 109 Problem Set Template
+%B. E. Burr made original
+
+\documentclass{article} % basic article document class
+
+\usepackage{amsmath} % packages that allow mathematical formatting
+\usepackage{amssymb}
+\usepackage{graphicx} % package that allows you to include graphics
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\frenchspacing % one space after periods
+\usepackage{fancyhdr} % allows custom headers
+\usepackage{array}
+\usepackage{listings} % for displaying code
+\lstset{tabsize = 4}
+\usepackage{bbm}
+\usepackage{float}
+
+\pagestyle{fancy}
+\lhead{CS 109, Stanford University \\ Problem Set 5} 
+\rhead{Bryan Yaggi}
+\cfoot{\thepage}
+\renewcommand{\footrulewidth}{0.4pt} %footer
+
+\begin{document}
+\thispagestyle{fancy} %shows header/footer
+
+\begin{enumerate}
+	
+	\item \textit{A robot is located at the center of a square world that is 8 kilometers on each side. A package is dropped off in the robot's world at a point (x,y) that is uniformly (continuously) distributed in the square. If the robot's starting location is designated to be (0,0) and the robot can only move up, down, left, and right parallel to the sides of the square, the distance the robot must travel to get to the package at point (x,y) is $|x| + |y|$. Let $D$ be the distance the robot travels to get to the package. Compute $E[D]$.}\\
+	\\
+	$X$ is the absolute distance from the robot to the package along the x axis\\
+	$Y$ is the absolute distance from the robot to the package along the y axis
+	\begin{align*}
+	X &\sim Uni(\alpha, \beta) \text{ where } \alpha = 0, \beta = 4 km\\
+	Y &\sim Uni(\alpha, \beta) \text{ where } \alpha = 0, \beta = 4 km\\
+	E[D] &= E[X] + E[Y]\\
+	E[X] = E[Y] &= \frac{\alpha + \beta}{2} = 2 km\\
+	E[D] &= 4 km
+	\end{align*}
+	
+	\item \textit{Say that of all the students who will attend Stanford, each will buy at most one laptop computer when they first arrive at school. 40\% of students will purchase a PC, 30\% will purchase a Mac, 10\% will purchase a Linux machine, and the remaining 20\% will not buy a laptop at all. If 15 students are asked which, if any, laptop they purchased, what is the probability that exactly 6 students will have purchased a PC, 4 will have purchased a Mac, 2 will have purchased a Linux machine, and the remaining 3 students will have not purchased a laptop?}
+	\begin{align*}
+	P_{PC} = .4, P_{Mac} = .3, P_{Linux} = .1, P_{none} = .2\\
+	P_{\text{event occurs}} &= \frac{15!}{6!\,4!\,2!\,3!} P_{PC}^6P_{Mac}^4P_{Linux}^2P_{none}^3 = 1.674 \times 10^{-2}
+	\end{align*}
+	
+	\item \textit{Let $X$ and $Y$ be two independent random variables such that $X \sim Geo(p)$ and $Y \sim Geo(p)$. Mathematically derive an expression for $P(X = k | X + Y = n)$.}
+	\begin{align*}
+	P(X = k | X + Y = n) &= \frac{P(X = k, Y = n - k)}{P(X + Y = n)}\\
+	&= \frac{P(X = k)P(Y = n - k)}{P(X + Y = n)}\\
+	P(X + Y = n) &= \sum_{y} P(X + Y = n, Y = y) &\text{by convolution}\\
+	&= \sum_{y} P(X = n - y)P(Y = y)\\
+	&= \sum_{y} (1 - p)^{n-y-1}p(1 - p)^{y-1}p\\
+	&= \sum_{y=1}^{n-1} p^2(1 - p)^{n-2}\\
+	&= p^2(1 - p)^{n-2} \sum_{y=1}^{n-1} 1\\
+	&= p^2(1 - p)^{n-2}(n - 1)\\
+	P(X = k | X + Y = n) &= \frac{(1 - p)^{k-1}p(1 - p)^{n-k-1}p}{p^2(1 - p)^{n-2}(n - 1)}\\
+	&= \frac{1}{n - 1}
+	\end{align*}
+	
+	\item \textit{Choose a number $X$ uniformly at random from the set of numbers $\{1, 2, 3, 4, 5\}$. Now choose a number uniformly at random from the subset no larger than $X$, that is from $\{1, ..., X\}$. Let $Y$ denote the second number chosen.}
+	\begin{enumerate}
+		\item \textit{Determine the joint probability mass function of $X$ and $Y$.}
+		\begin{align*}
+		P(X = x, Y = y) &=
+		\begin{cases}
+		\frac{1}{5}\frac{1}{x} &\text{if } y \leq x\\
+		0 &\text{if } y > x
+		\end{cases}
+		\end{align*}
+		
+		\item \textit{Determine the conditional mass function of $X$ given $Y = i$. Do this for $i = 1, 2, 3, 4, 5$.}
+		\begin{align*}
+		P(X = x | Y = i) &= \frac{P(X = x, Y = i)}{P(Y = i)}\\
+		P(Y = i) &= \frac{1}{5} \sum_{k = i}^{5} \frac{1}{k}\\
+		P(X = x | Y = i) &= \frac{1}{x \sum_{k = 1}^{5} \frac{1}{k}}\\
+		P(X = x | Y = 1) &= .438 \frac{1}{x}\\
+		P(X = x | Y = 2) &= .779 \frac{1}{x}\\
+		P(X = x | Y = 3) &= 1.277 \frac{1}{x}\\
+		P(X = x | Y = 4) &= 2.222 \frac{1}{x}\\
+		P(X = x | Y = 5) &= 5 \frac{1}{x}
+		\end{align*}
+		
+		\item \textit{Are $X$ and $Y$ independent?}
+		\begin{align*}
+		X \perp Y \text{ iff } \forall \, x, y: \, &P(X = x, Y = y) = P(X = x)P(Y = y)\\
+		&P(X = 2, Y = 1) = \frac{1}{10} \neq \frac{1}{5} * \frac{137}{300} = .091\\
+		&\therefore X \not \perp Y
+		\end{align*}
+		
+	\end{enumerate}
+	
+	\item \textit{Let $X$ be the outcome of a fair die rool. Let $Y = X^2$. What is the covariance $Cov(X, Y)$?}
+	\begin{align*}
+	Cov(X, Y) &= E[XY] - E[X]E[Y]\\
+	E[X] &= \sum_{i = 1}^{6} i * \frac{1}{6} = 3.5\\
+	E[Y] &= \sum_{i = 1}^{6} i^2 * \frac{1}{6} = 15.167\\
+	E[XY] &= \sum_{i = 1}^{6} i^3 * \frac{1}{6} = 73.5\\
+	Cov(X, Y) &= 20.42
+	\end{align*}
+	
+	\item \textit{You are tracking the distance to a satellite. An instrument reports that the satellite is 100 a.u. from Earth. Before you observed the instrument reading, your belief for the distance D of the satellite was a Gaussian $D \sim N(\mu = 98, \sigma^2 = 16)$. The instrument gives a reading that is true distance plus Gaussian noise with mean 0 and variance 4.}
+	\begin{enumerate}
+		\item \textit{What is the PDF of your prior belief of the true distance of the satellite?}\\
+		\\
+		$D$ is the true distance\\
+		$N$ is the noise\\
+		$R$ is the instrument reading
+		\begin{align*}
+		R &= D + N\\
+		D &\sim N(\mu_D = 98, \sigma_D^2 = 16)\\
+		N &\sim N(\mu_N = 0, \sigma_N^2 = 4)\\
+		R &\sim N(\mu_D + \mu_N = 98, \sigma_D^2 + \sigma_N^2 = 20)\\
+		f_{D|R}(d | r) &= \frac{P(R = r | D = d)f_D(d)}{P(R = r)} &\text{by Bayes' Theorem}\\
+		f_D(d) &= \frac{1}{\sigma_D \sqrt{2 \pi}} e^{-\frac{1}{2}(\frac{d - \mu_D}{\sigma_D})^2}
+		\end{align*}
+		
+		\item \textit{What is the probability density of seeing an observation of 100 a.u. from your instrument, given that the true distance of the satellite is equal to t?}
+		\begin{align*}
+		P(R = r | D = d) &= f_N(n = r - d)\\
+		f_N(n) &= \frac{1}{\sigma_N \sqrt{2 \pi}} e^{-\frac{1}{2}(\frac{n - \mu_N}{\sigma_N})^2}\\
+		P(R = 100 | D = t) &= f_N(n = 100 - t)\\
+		f_N(n = 100 - t) &= \frac{1}{\sigma_N \sqrt{2 \pi}} e^{-\frac{1}{2}(\frac{(100 - t) - \mu_N}{\sigma_N})^2}
+		\end{align*}
+		
+		\item \textit{What is the PDF of your posterior belief (after observing the instrument reading) of the true distance of the satellite?}
+		\begin{align*}
+		f_{D|R}(d | r) = \frac{1}{c} \cdot \frac{1}{2 \pi \sigma_N \sigma_D} e^{-\frac{1}{2} ((\frac{100 - t - \mu_N}{\sigma_N})^2 + (\frac{d - \mu_D}{\sigma_D})^2)}
+		\end{align*}
+		
+	\end{enumerate}
+	
+	\item \textit{Consider the following function which simulates repeatedly rolling a 6-sided die (where each integer value from 1 to 6 is equally likely to be rolled) until a value $\geq 3$ is rolled.}
+	\begin{lstlisting}
+	int roll()
+	{
+		int total = 0;
+		while (true) // infinite loop
+		{
+			int roll = randomInteger(1, 6);
+			total += roll;
+			if (roll >= 3) // exit condition
+			{
+				break;
+			}
+		}
+		return total;
+	}
+	\end{lstlisting}
+	\begin{enumerate}
+		\item \textit{Let $X$ be the value returned by the function. What is $E[X]$?}
+		\begin{align*}
+		E[X] = 3(\frac{1}{4}) + 4(\frac{1}{4}) + 5(\frac{1}{4}) + 6(\frac{1}{4}) = \frac{9}{2}
+		\end{align*}
+		
+		\item \textit{Let $Y$ be the number of times that the die is rolled (i.e. the number of times that a random number is generated) in the function. What is $E[Y]$?}
+		\begin{align*}
+		Y &\sim Geo(p = \frac{2}{3})\\
+		E[Y] &= \frac{1}{p} = \frac{3}{2}
+		\end{align*}			
+		
+	\end{enumerate}
+	
+	\item \textit{You go on a camping trip with two friends who each have a mobile phone. Since you are out in the wilderness, mobile phone reception isn't very good. One friend's phone will independently drop calls with 10\% probability. Your other friend's phone will independently drop calls with 25\% probability. Say you need to make 6 phone calls, so you randomly choose one of the two phones and you will use that same phone to make all your calls (but you don't know which has a 10\% versus 25\% chance of dropping calls). Of the first 3 (out of 6) calls you make, one of them is dropped. What is the conditional expected number of dropped calls in the 6 total calls you make (conditioned on already having one of the first 3 calls dropped)?}\\
+	\\
+	$X$ is the number of dropped calls out of the 6 phone calls\\
+	$Y$ is the number of dropped calls out of the first 3 calls\\
+	$p_{phone,\alpha}$ is the probability of choosing phone $\alpha$\\
+	$p_{phone,\beta}$ is the probability of choosing phone $\beta$\\
+	$p_{drop,\alpha}$ is the probability a call is dropped from phone $\alpha$\\
+	$P_{drop,\beta}$ is the probability a call is dropped from phone $\beta$
+	\begin{align*}
+	p_Y(y) &= p_{phone,\alpha} \cdot \binom{3}{y} p_{drop,\alpha}^y (1 - p_{drop,\alpha})^{3 - y} + p_{phone,\beta} \cdot \binom{3}{y} p_{drop,\beta}^y (1 - p_{drop,\beta})^{3 - y}\\
+	p_{X,Y}(x, y) &= p_{phone,\alpha} \cdot \binom{3}{y} p_{drop,\alpha}^y (1 - p_{drop,\alpha})^{3 - y} \cdot \binom{3}{x - y} p_{drop,\alpha}^{x-y} (1 - p_{drop,\alpha})^{3-(x-y)}\\
+	&+ p_{phone,\beta} \cdot \binom{3}{y} p_{drop,\beta}^y (1 - p_{drop,\beta})^{3 - y} \cdot \binom{3}{x - y} p_{drop,\beta}^{x-y} (1 - p_{drop,\beta})^{3-(x-y)}\\
+	p_{X|Y}(x, y) &= \frac{p_{X,Y}(x, y)}{p_Y(y)}\\
+	E[X | Y = y] &= \sum_{x} x \cdot p_{X|Y}(x, y)\\
+	p_Y(Y = 1) &= .332\\
+	E[X | Y = 1] &= 1.586
+	\end{align*}
+	
+	\item \textit{Let $X_1, X_2, X_3,$ and $X_4$ be a set of pairwise uncorrelated random variables (i.e. $\rho(X_i, X_j) = 0$ when $i \neq j$), which all have the same mean, $\mu$ and variance, $\sigma^2$.\\
+	An identity that will be useful for this problem is that $Var(X + Y) = Var(X) + Var(Y) + 2Cov(X, Y)$.}
+	\begin{enumerate}
+		\item \textit{What is the correlation $\rho(X_1 + X_2, X_3 + X_4)$?}
+		\begin{align*}
+		\rho(X_1 + X_2, X_3 + X_4) &= \frac{Cov(X_1 + X_2, X_3 + X_4)}{\sqrt{Var(X_1 + X_2) Var(X_3 + X_4)}}\\
+		&= \frac{Cov(X_1, X_3) + Cov(X_1, X_4) + Cov(X_2, X_3) + Cov(X_2, X_4)}{\sqrt{(Var(X_1) + Var(X_2) + 2Cov(X_1, X_2))(Var(X_3) + Var(X_4) + 2Cov(X_3, X_4))}}\\
+		&= 0 \text{ since } Cov(X_i, X_j) = 0 \text{ when } i \neq j
+		\end{align*}
+		
+		\item \textit{What is the correlation $\rho(X_1 + X_2, X_2 + X_3)$?}
+		\begin{align*}
+		\rho(X_1 + X_2, X_2 + X_3) &= \frac{Cov(X_1 + X_2, X_2 + X_3)}{\sqrt{Var(X_1 + X_2) Var(X_2 + X_3)}}\\
+		&= \frac{Cov(X_1, X_2) + Cov(X_1, X_3) + Cov(X_2, X_2) + Cov{X_2, X_3}}{\sqrt{(Var(X_1) + Var(X_2) + 2Cov(X_1, X_2))(Var(X_2) + Var(X_3) + 2Cov(X_2, X_3))}}\\
+		&= \frac{Var(X_2)}{\sqrt{(Var(X_1) + Var(X_2))(Var(X_2) + Var(X_3))}}\\
+		&= \frac{\sigma^2}{2\sigma^2}\\
+		&= \frac{1}{2}
+		\end{align*}
+		
+		\item \textit{What is the correlation $\rho(2X_1, X_1 + X_2)$?}
+		\begin{align*}
+		\rho(2X_1, X_1 + X_2) &= \frac{Cov(2X_1, X_1 + X_2)}{\sqrt{Var(2X_1) Var(X_1 + X_2)}}\\
+		&= \frac{2Cov(X_1, X_1 + X_2)}{\sqrt{4Var(X_1)(Var(X_1) + Var(X_2) + 2Cov(X_1, X_2))}}\\
+		&= \frac{2(Cov(X_1, X_1) + Cov(X_1, X_2))}{\sqrt{4Var(X_1)(Var(X_1) + Var(X_2) + 2Cov(X_1, X_2))}}\\
+		&= \frac{2Var(X_1)}{\sqrt{4Var(X_1)(Var(X_1) + Var(X_2))}}\\
+		&= \frac{1}{\sqrt{2}}
+		\end{align*}
+		
+	\end{enumerate}
+	
+	\item \textit{In class, we considered the following recursive function.}
+	\begin{lstlisting}
+	int recurse()
+	{
+		int x = randomInteger(1, 3);
+		if (x == 1)
+		{
+			return 3;
+		}
+		else if (x == 2)
+		{
+			return (5 + recurse());
+		}
+		else
+		{
+			return (7 + recurse());
+		}
+	}
+	\end{lstlisting}
+	\textit{Let $Y$ be the value returned by recurse(). We previously computed $E[Y] = 15$. What is $Var(Y)$?}
+	\begin{align*}
+	Var(Y) &= E[Y^2] - E[Y]^2\\
+	E[Y^2] &= E[E[Y^2 | X]] = E[Y^2 | X = 1]P(X = 1) + E[Y^2 | X = 2]P(X = 2) + E[Y^2 | X = 3]P(X = 3)\\
+	E[Y^2 | X = 1] &= 9\\
+	E[Y^2 | X = 2] &= E[(5 + Y)^2] = E[25 + 10Y + Y^2] = 25 + 10E[Y] + E[Y^2]\\
+	E[Y^2 | X = 3] &= E[(7 + Y)^2] = E[49 + 14Y + Y^2] = 49 + 14E[Y] + E[Y^2]\\
+	E[Y^2] &= 443\\
+	E[Y]^2 &= 225\\
+	Var(Y) &= 218
+	\end{align*}
+	
+	\item \textit{\textbf{[coding]} In this question, you are going to learn how to calculate p-values for experiments that are called A/B tests. These experiments are ubiquitous. They are a staple of both scientific and user interaction design.\\
+	Massive online courses have allowed for distributed experimentation into what practices optimize students' learning. Coursera, a free online education platform that started at Stanford is testing out new ways of teaching a concept in probability. They have 2 different learning activities, "activity1" and "activity2" and they want to figure out which activity leads to better learning outcomes. After interacting with a learning activity, Coursera evaluates a student's learning outcome by asking them to solve a set of questions. After a 2 week period, Coursera randomly assigns each student to either be given "activity1" (Group A) or "activity2" (Group B). The activity that is shown to each student and the student's measured learning outcomes can be found in the file "learningOutcomes.csv".}
+	\begin{enumerate}
+	\item \textit{What is the difference in sample means of learning outcomes betweenb students who were given "activity1" and students who were given "activity2"?}
+	\begin{align*}
+	8.398
+	\end{align*}
+	
+	\item \textit{Calculate the p-value for the observed difference in means reported in (a). In other words, assuming the learning objectives for students who had been given "activity1" and "activity2" were identically distributed, what is the probability that you could have samples 2 groups of students such that you could have observed a difference of means as extreme or more extreme than the one calculated from your data?}
+	\begin{align*}
+	.049
+	\end{align*}
+	
+	\item \textit{The file "background.csv" stores the background of each user. Student backgrounds fall under 3 categories: more experience, average experience, and less experience. For each of the 3 backgrounds, calculate a difference in means in learning outcome between "activity1" and "activity2" and the p-value of that difference.}
+	\begin{align*}
+	\text{More experience:} &\text{ mean difference = 28.42} \text{ p-value = 0}\\
+	\text{Average experience:} &\text{ mean difference = 24.98} \text{ p-value = .0063}\\
+	\text{Less experience:} &\text{ mean difference = 26.02} \text{ p-value = .0006}
+	\end{align*}
+	
+	\end{enumerate}
+
+\end{enumerate}
+
+\end{document}
